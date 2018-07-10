@@ -14,7 +14,7 @@ class CarsController extends Controller
      */
     public function index()
     {
-        return Cars::all();
+        return response()->json(array( 'data' => Cars::all()), 201 );
     }
 
     /**
@@ -25,7 +25,14 @@ class CarsController extends Controller
      */
     public function store(Request $request)
     {
-        return Cars::create($request->all);
+        Cars::create(array(
+            "marka" => $request['marka'],
+            "model" => $request['model'],
+            "rocznik" => $request['rocznik'],
+            "pojemnosc" => $request['pojemnosc'],
+        ));
+
+        return response()->json(array('msg' => "Dodane poprawnie"), 200);
     }
 
     /**
@@ -36,7 +43,7 @@ class CarsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return response()->json(array('msg' => "Edytowane poprawnie", 'data' => Cars::findOrFail($id)), 201);
     }
 
     /**
@@ -49,9 +56,14 @@ class CarsController extends Controller
     public function update(Request $request, $id)
     {
         $cars = Cars::findOrFail($id);
-        $cars->update($request->all());
+        $cars->update(array(
+            "marka" => $request['marka'],
+            "model" => $request['model'],
+            "rocznik" => $request['rocznik'],
+            "pojemnosc" => $request['pojemnosc'],
+        ));
 
-        return $cars;
+        return response()->json(array('msg' => "Edytowane poprawnie"), 201);
     }
 
     /**
@@ -64,6 +76,6 @@ class CarsController extends Controller
     {
         Cars::find($id)->delete();
 
-        return 204;
+        return response()->json(array('msg' => "Usunięte poprawnie"), 204);
     }
 }
